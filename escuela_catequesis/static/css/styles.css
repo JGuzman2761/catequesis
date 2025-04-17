@@ -1,0 +1,5 @@
+.sky-background {
+    background-color: #87CEEB; /* Azul cielo */
+    min-height: 100vh;         /* Asegura que cubra toda la pantalla */
+    padding-top: 40px;
+}

@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-5">
+    <div class="card shadow">
+        <div class="card-header bg-info text-white">
+            <h4 class="mb-0">Detalles del Padre</h4>
+        </div>
+        <div class="card-body">
+            <p><strong>Nombres:</strong> {{ object.nombres }}</p>
+            <p><strong>Apellidos:</strong> {{ object.apellidos }}</p>
+            <p><strong>Teléfono:</strong> {{ object.telefono }}</p>
+            <p><strong>Email:</strong> {{ object.email }}</p>
+            <p><strong>Dirección:</strong> {{ object.direccion }}</p>
+            <a href="{% url 'padre_list' %}" class="btn btn-secondary">Volver al listado</a>
+            <li class="list-group-item text-muted">
+                <small><i class="bi bi-clock"></i> Creado el: {{ object.fecha_creacion|date:"d/m/Y H:i" }}</small><br>
+                <small><i class="bi bi-arrow-repeat"></i> Última actualización: {{ object.ultima_actualizacion|date:"d/m/Y H:i" }}</small>
+            </li>
+        </div>
+    </div>
+</div>
+{% endblock %}

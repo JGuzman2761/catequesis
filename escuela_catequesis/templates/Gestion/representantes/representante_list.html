@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Lista de Representantes</h2>
+        <a href="{% url 'representante_create' %}" class="btn btn-success">
+            <i class="bi bi-plus-circle"></i> Nuevo Representante
+        </a>
+    </div>
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Teléfono</th>
+                        <th>Email</th>
+                        <th>Parroquia</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for representante in object_list %}
+                    <tr>
+                        <td>{{ representante.nombres }}</td>
+                        <td>{{ representante.telefono }}</td>
+                        <td>{{ representante.email }}</td>
+                        <td>{{ representante.parroquia.nombre }}</td>
+                        <td>
+                            <a href="{% url 'representante_detail' representante.id %}" class="btn btn-sm btn-info">Ver</a>
+                            <a href="{% url 'representante_update' representante.id %}" class="btn btn-sm btn-warning">Editar</a>
+                            <a href="{% url 'representante_delete' representante.id %}" class="btn btn-sm btn-danger">Eliminar</a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="5" class="text-center">No hay representantes registrados.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
