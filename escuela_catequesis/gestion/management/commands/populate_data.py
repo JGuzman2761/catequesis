@@ -31,16 +31,12 @@ class Command(BaseCommand):
         for _ in range(10):
             parroquia = random.choice(parroquias)
             
-            # El representante será aleatoriamente uno de los ya creados (o ninguno si aún no hay)
-            representante = random.choice(catequistas_creados) if catequistas_creados and random.random() > 0.3 else None
-
             catequista = Catequista.objects.create(
                 parroquia=parroquia,
                 nombres=fake.first_name(),
                 apellidos=fake.last_name(),
                 telefono=fake.phone_number(),
                 email=fake.email(),
-                representante=representante
             )
 
             catequistas_creados.append(catequista)
@@ -95,7 +91,8 @@ class Command(BaseCommand):
                 codigo = fake.unique.lexify(text='CUR??###'),
                 nombre=fake.job(),
                 descripcion=fake.text(max_nb_chars=200),
-                requisitos_documentos=fake.text(max_nb_chars=100)
+                requisitos_documentos=fake.text(max_nb_chars=100),
+                costo=fake.random_int(min=10, max=100)
             )
             cursos.append(curso)
             self.stdout.write(self.style.SUCCESS(f'Curso creado: {curso.nombre}'))
@@ -114,17 +111,24 @@ class Command(BaseCommand):
             except Exception as e:
                 self.stdout.write(self.style.ERROR(f'Error al crear grupo: {str(e)}'))
         # Create Inscripciones
+        inscripciones_creadas = set()
         for _ in range(50):
             estudiante = random.choice(Estudiante.objects.all())
             curso = random.choice(Curso.objects.all())
-            grupo = random.choice(Grupo.objects.all())
-            inscripcion = Inscripcion.objects.create(
-                estudiante=estudiante,
-                curso=curso,
-                grupo=grupo,
-                fecha_inscripcion=timezone.now().date(),
-                documentos_entregados=fake.boolean(chance_of_getting_true=80)
-            )
-            self.stdout.write(self.style.SUCCESS(f'Created Inscripcion: {estudiante} - {curso}'))
+            
+            # Check if the combination of estudiante and curso already exists
+            if (estudiante.id, curso.codigo) not in inscripciones_creadas:
+                grupo = random.choice(Grupo.objects.all())
+                inscripcion = Inscripcion.objects.create(
+                    estudiante=estudiante,
+                    curso=curso,
+                    grupo=grupo,
+                    fecha_inscripcion=timezone.now().date(),
+                    documentos_entregados=fake.boolean(chance_of_getting_true=80)
+                )
+                self.stdout.write(self.style.SUCCESS(f'Created Inscripcion: {estudiante} - {curso}'))
+                inscripciones_creadas.add((estudiante.id, curso.codigo))
+            else:
+                self.stdout.write(self.style.WARNING(f'Duplicate Inscripcion: {estudiante} - {curso}'))
 
         self.stdout.write(self.style.SUCCESS('Data population complete!'))

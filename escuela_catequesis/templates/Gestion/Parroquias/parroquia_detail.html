@@ -1,25 +1,37 @@
 {% extends 'base.html' %}
-{% block title %}Detalle de Parroquia{% endblock %}
 
 {% block content %}
-<h2>{{ object.nombre }}</h2>
-<div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-  <h4 class="mb-0">Detalle de la parroquia</h4>
-  <a href="{% url 'parroquia_list' %}" class="btn btn-light btn-sm">
-      <i class="bi bi-arrow-left"></i> Volver
-  </a>
+<div class="container mt-5">
+    <div class="card shadow-lg">
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+            <h4 class="mb-0">Detalle de la Parroquia</h4>
+            <a href="{% url 'parroquia_list' %}" class="btn btn-light btn-sm">
+                <i class="bi bi-arrow-left"></i> Volver
+            </a>
+        </div>
+        <div class="card-body">
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">
+                    <strong>Nombre:</strong> {{ object.nombre }}
+                </li>
+                <li class="list-group-item">
+                    <strong>Dirección:</strong> {{ object.direccion }}
+                </li>
+                <li class="list-group-item">
+                    <strong>Código Postal:</strong> {{ object.codigo_postal }}
+                </li>
+                <li class="list-group-item">
+                    <strong>Teléfono:</strong> {{ object.telefono }}
+                </li>
+                <li class="list-group-item">
+                    <strong>Email:</strong> {{ object.email }}
+                </li>
+                <li class="list-group-item text-muted">
+                    <small><i class="bi bi-clock"></i> Creado el: {{ object.fecha_creacion|date:"d/m/Y H:i" }}</small><br>
+                    <small><i class="bi bi-arrow-repeat"></i> Última actualización: {{ object.ultima_actualizacion|date:"d/m/Y H:i" }}</small>
+                </li>
+            </ul>
+        </div>
+    </div>
 </div>
-<ul class="list-group mb-3 mt-2">
-  <li class="list-group-item"><strong>Nombre:</strong> {{ object.nombre }}</li>
-  <li class="list-group-item"><strong>Dirección:</strong> {{ object.direccion }}</li>
-  <li class="list-group-item"><strong>Código Postal:</strong> {{ object.codigo_postal }}</li>
-  <li class="list-group-item"><strong>Teléfono:</strong> {{ object.telefono }}</li>
-  <li class="list-group-item"><strong>Email:</strong> {{ object.email }}</li>
-  <li class="list-group-item text-muted">
-    <small><i class="bi bi-clock"></i> Creado el: {{ object.fecha_creacion|date:"d/m/Y H:i" }}</small><br>
-    <small><i class="bi bi-arrow-repeat"></i> Última actualización: {{ object.ultima_actualizacion|date:"d/m/Y H:i" }}</small>
-  </li>
-</ul>
-<a href="{% url 'parroquia_update' object.pk %}" class="btn btn-warning">Editar</a>
-<a href="{% url 'parroquia_list' %}" class="btn btn-secondary">Volver</a>
 {% endblock %}

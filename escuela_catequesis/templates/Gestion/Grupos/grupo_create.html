@@ -1,0 +1,184 @@
+{% extends 'base.html' %} {# O tu plantilla base #}
+
+{% block content %}
+<div class="container card-body bg-secondary text-white mt-2">
+    <h2>{% if object %}Editar Grupo{% else %}Crear Grupo{% endif %}</h2>
+
+    <form method="post">
+        {% csrf_token %}
+
+        <div class="row">
+
+            {% comment %} Tu primer div de columna {% endcomment %}
+            <div class="col-md-4 mb-3">
+                <label for="{{ form.codigo.id_for_label }}" class="form-label">{{ form.codigo.label }}</label>
+                {{ form.codigo }} {# Renderiza el widget del campo #}
+                {% if form.codigo.errors %}
+                    <div class="invalid-feedback d-block"> {# d-block es importante para mostrar el error debajo del campo #}
+                        {{ form.codigo.errors }}
+                    </div>
+                {% endif %}
+                {% if form.codigo.help_text %} {# Opcional: Mostrar texto de ayuda #}
+                    <div class="form-text">{{ form.codigo.help_text|safe }}</div>
+                {% endif %}
+            </div>
+
+            {% comment %} Tu segundo div de columna {% endcomment %}
+            <div class="col-md-6 mb-3">
+                <label for="{{ form.nombre.id_for_label }}" class="form-label">{{ form.nombre.label }}</label>
+                {{ form.nombre }} {# Renderiza el widget del campo #}
+                {% if form.nombre.errors %}
+                    <div class="invalid-feedback d-block">
+                        {{ form.nombre.errors }}
+                    </div>
+                {% endif %}
+                {% if form.nombre.help_text %} {# Opcional: Mostrar texto de ayuda #}
+                    <div class="form-text">{{ form.nombre.help_text|safe }}</div>
+                {% endif %}
+            </div>
+
+        </div> {# Cierre del div.row #}
+
+
+        <div class="col-md-8 mb-3">
+            <label for="{{ form.descripcion.id_for_label }}" class="form-label">{{ form.descripcion.label }}</label>
+            {{ form.descripcion }}
+            {% if form.descripcion.errors %}<div class="invalid-feedback d-block">{{ form.descripcion.errors }}</div>{% endif %}
+        </div>
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label for="{{ form.curso.id_for_label }}" class="form-label">{{ form.curso.label }}</label>
+                {{ form.curso }}
+                {% if form.curso.errors %}<div class="invalid-feedback d-block">{{ form.curso.errors }}</div>{% endif %}
+            </div>
+            <div class="col-md-2 mb-3">
+                <label for="{{ form.max_estudiantes.id_for_label }}" class="form-label">{{ form.max_estudiantes.label }}</label>
+                {{ form.max_estudiantes }}
+                {% if form.max_estudiantes.errors %}<div class="invalid-feedback d-block">{{ form.max_estudiantes.errors }}</div>{% endif %}
+            </div>
+        </div>
+        {# Widget personalizado para Catequistas #}
+        <div class="mb-3 mt-2">
+            <h4 class="form-label text-center me-md-5">Catequistas</h4>
+            {% if form.catequistas.errors %}<div class="invalid-feedback d-block">{{ form.catequistas.errors }}</div>{% endif %}
+
+            <div class="row">
+                {# Caja de Disponibles #}
+                <div class="col-md-5">
+                    <label for="catequistas-disponibles" class="form-label">Disponibles</label>
+                    <select multiple class="form-control" id="catequistas-disponibles" size="10">
+                        {# Las opciones se llenarán con JS #}
+                    </select>
+                </div>
+
+                {# Botones de Mover #}
+                <div class="col-md-1 text-center align-self-center">
+                    <button type="button" id="btn-add" class="btn btn-warning mb-2 w-100">></button>
+                    <button type="button" id="btn-add-all" class="btn btn-warning mb-2 w-100">>></button>
+                    <button type="button" id="btn-remove" class="btn btn-warning mb-2 w-100"><</button>
+                    <button type="button" id="btn-remove-all" class="btn btn-warning w-100"><<</button>
+                </div>
+
+                {# Caja de Seleccionados - ESTE ES EL CAMPO REAL DEL FORMULARIO #}
+                <div class="col-md-5">
+                     <label for="{{ form.catequistas.id_for_label }}" class="form-label">Seleccionados</label>
+                    <select multiple name="{{ form.catequistas.name }}" class="form-control" id="{{ form.catequistas.id_for_label }}" size="10">
+                        {# Las opciones se llenarán con JS #}
+                    </select>
+                   
+                </div>
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Guardar</button>
+        <a href="{% url 'grupo_list' %}" class="btn btn-danger">Cancelar</a>
+    </form>
+</div>
+
+{# Incluir jQuery si lo usas, o adaptar a Vanilla JS #}
+{# <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> #}
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const todosCatequistas = [
+        {% for cat in todos_catequistas %}
+            { id: {{ cat.id }}, text: "{{ cat|escapejs }}" }, // Asume que Catequista tiene __str__ definido
+        {% endfor %}
+    ];
+
+    // IDs de los catequistas ya seleccionados (viene de la vista Update)
+    const seleccionadosIds = {{ seleccionados_ids|default:'[]'|safe }};
+
+    const selectDisponibles = document.getElementById('catequistas-disponibles');
+    const selectSeleccionados = document.getElementById('{{ form.catequistas.id_for_label }}'); // ID del campo real
+
+    // --- Función para poblar las listas ---
+    function poblarListas() {
+        selectDisponibles.innerHTML = '';
+        selectSeleccionados.innerHTML = '';
+
+        todosCatequistas.forEach(cat => {
+            const option = new Option(cat.text, cat.id);
+            if (seleccionadosIds.includes(cat.id)) {
+                selectSeleccionados.appendChild(option);
+            } else {
+                selectDisponibles.appendChild(option);
+            }
+        });
+    }
+
+    // --- Funciones de Movimiento ---
+    function moverOpciones(origenSelect, destinoSelect) {
+        Array.from(origenSelect.selectedOptions).forEach(option => {
+            destinoSelect.appendChild(option); // Mueve el elemento option
+        });
+        // Actualizar la lista de IDs seleccionados (opcional, pero útil si se necesita)
+        actualizarSeleccionadosIds();
+    }
+
+    function moverTodo(origenSelect, destinoSelect) {
+        Array.from(origenSelect.options).forEach(option => {
+             destinoSelect.appendChild(option);
+        });
+         actualizarSeleccionadosIds();
+    }
+
+    // --- Función auxiliar para mantener actualizada la lista de IDs (si la usas) ---
+    function actualizarSeleccionadosIds() {
+        // Esta función es más para lógica interna si la necesitaras,
+        // lo crucial es el estado del selectSeleccionados al enviar el form.
+        seleccionadosIds.length = 0; // Vaciar array
+        Array.from(selectSeleccionados.options).forEach(opt => {
+            seleccionadosIds.push(parseInt(opt.value));
+        });
+        console.log("Seleccionados ahora:", seleccionadosIds);
+    }
+
+    // --- Event Listeners para botones ---
+    document.getElementById('btn-add').addEventListener('click', () => {
+        moverOpciones(selectDisponibles, selectSeleccionados);
+    });
+    document.getElementById('btn-add-all').addEventListener('click', () => {
+        moverTodo(selectDisponibles, selectSeleccionados);
+    });
+    document.getElementById('btn-remove').addEventListener('click', () => {
+        moverOpciones(selectSeleccionados, selectDisponibles);
+    });
+     document.getElementById('btn-remove-all').addEventListener('click', () => {
+        moverTodo(selectSeleccionados, selectDisponibles);
+    });
+
+    // --- IMPORTANTE: Seleccionar todo en la caja 'Seleccionados' antes de enviar ---
+    const form = selectSeleccionados.closest('form');
+    form.addEventListener('submit', function() {
+        Array.from(selectSeleccionados.options).forEach(option => {
+            option.selected = true;
+        });
+    });
+
+    // --- Poblar las listas al cargar la página ---
+    poblarListas();
+
+});
+</script>
+{% endblock %}

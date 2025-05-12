@@ -2,7 +2,26 @@
 {% load static %}
 {% block content %}
 
-<div class="container text-center mt-5">
-    <img src="{% static 'images/iglesia_guadalupe.jpg' %}" alt="Iglesia Guadalupe" class="img-fluid rounded shadow" style="max-height: 600px;">
+<div class="container mt-5">
+    <div class="row align-items-center">
+        <!-- Imagen a la izquierda -->
+        <div class="col-md-5 mb-4 mb-md-0">
+            <img src="{% static 'images/iglesia_guadalupe.jpg' %}" alt="Iglesia Guadalupe"
+                class="img-fluid rounded shadow" style="max-height: 400px;">
+        </div>
+
+        <!-- Texto a la derecha -->
+        <div class="col-md-7 mt-0">
+            <h2 class="text-dark-blue fw-bold">¡Bienvenidos!</h2>
+            <p class="fs-5">
+                A la <strong>Misión Católica Nuestra Señora de Guadalupe</strong>, un espacio de fe, esperanza y formación cristiana.
+            </p>
+            <p>
+                Nuestra comunidad te acoge con los brazos abiertos para que vivas la catequesis y la vida parroquial como una experiencia de crecimiento espiritual, familiar y comunitario.
+            </p>
+            <p class="fst-italic "><strong>Que viva la Virgen de Guadalupe, madre de todos los pueblos.</strong></p>
+        </div>
+    </div>
 </div>
+
 {% endblock %}

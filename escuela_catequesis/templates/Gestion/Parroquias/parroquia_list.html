@@ -14,7 +14,7 @@
         <th>Nombre</th>
         <th>Teléfono</th>
         <th>Email</th>
-        <th class="justify-content-between">Acciones</th>
+        <th class="align-items-center">Acciones</th>
       </tr>
     </thead>
     <tbody>
@@ -24,11 +24,12 @@
         <td>{{ parroquia.telefono }}</td>
         <td>{{ parroquia.email }}</td>
         <td>
-          <div class="justify-content-center ">
-            <a href="{% url 'parroquia_detail' parroquia.pk %}" class="btn btn-info btn-sm">Ver</a>
-            <a href="{% url 'parroquia_update' parroquia.pk %}" class="btn btn-primary btn-sm">Editar</a>
-            <a href="{% url 'parroquia_delete' parroquia.pk %}" class="btn btn-danger btn-sm">Eliminar</a>
-          </div>
+         <div class="d-flex justify-content-center gap-2">
+            {# Añade flex-fill a cada botón/enlace #}
+            <a href="{% url 'parroquia_detail' parroquia.pk %}" class="btn btn-info btn-sm flex-fill">Ver</a>
+            <a href="{% url 'parroquia_update' parroquia.pk %}" class="btn btn-primary btn-sm flex-fill">Editar</a>
+            <a href="{% url 'parroquia_delete' parroquia.pk %}" class="btn btn-danger btn-sm flex-fill">Eliminar</a>
+         </div>
         </td>
       </tr>
       {% endfor %}

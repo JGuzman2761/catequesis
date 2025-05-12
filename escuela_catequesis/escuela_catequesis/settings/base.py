@@ -1,4 +1,3 @@
-
 """
 Django base settings for escuela_catequesis project.
 """
@@ -25,9 +24,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_filters',
+    'crispy_forms',
+    'crispy_bootstrap5',
     'gestion', # gestion de cursos
-    'widget_tweaks',
-]
+    ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -121,3 +122,6 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  # Carpeta para almacenar archivos
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+CRISPY_TEMPLATE_PACK = "bootstrap5"

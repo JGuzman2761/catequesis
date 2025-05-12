@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="card shadow-lg mx-auto" style="max-width: 900px;">
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+            <h4 class="mb-0">Detalle del Estudiante</h4>
+            <a href="{% url 'estudiante_list' %}" class="btn btn-light btn-sm">
+                <i class="bi bi-arrow-left"></i> Volver
+            </a>
+        </div>
+        <div class="card-body row">
+            <!-- Datos del estudiante -->
+            <div class="col-md-8">
+                <h4 class="card-title mb-3">{{ object.nombres }} {{ object.apellidos }}</h4>
+                <table class="table table-borderless table-sm">
+                    <tbody>
+                        <tr>
+                            <th class="text-end" style="width: 40%;">Teléfono:</th>
+                            <td>{{ object.telefono }}</td>
+                        </tr>
+                        <tr>
+                            <th class="text-end">Email:</th>
+                            <td>{{ object.email }}</td>
+                        </tr>
+                        <tr>
+                            <th class="text-end">Fecha de nacimiento:</th>
+                            <td>{{ object.fecha_nacimiento|date:"d/m/Y" }}</td>
+                        </tr>
+                        <tr>
+                            <th class="text-end">Padre:</th>
+                            <td>{{ object.padre }}</td>
+                        </tr>
+                        <tr>
+                            <th class="text-end">Padrino(s):</th>
+                            <td>
+                                {% for padrino in object.padrino.all %}
+                                    {{ padrino }}{% if not forloop.last %}, {% endif %}
+                                {% empty %}
+                                    <em>Sin padrinos</em>
+                                {% endfor %}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <hr class="my-3">
+                <p class="col-md-6 text-muted mb-0">
+                    <small><i class="bi bi-clock"></i> Creado el: {{ object.fecha_creacion|date:"d/m/Y H:i" }}</small><br>
+                    <small><i class="bi bi-arrow-repeat"></i> Actualizado: {{ object.ultima_actualizacion|date:"d/m/Y H:i" }}</small>
+                </p>
+            </div>
+
+            <!-- Foto del estudiante -->
+            <div class="col-md-4 d-flex justify-content-center align-items-start">
+                <img src="{% if object.photo %}{{ object.photo.url }}{% else %}{{ MEDIA_URL }}estudiante_photos/default_foto.jpg{% endif %}"
+                     alt="Foto del estudiante" class="rounded-circle border" width="180" height="180">
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

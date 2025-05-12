@@ -1,42 +1,24 @@
+from django.urls import path, include
 
-from django.urls import path
-from .views import (
-    ParroquiaListView, ParroquiaDetailView, home_view,
-    ParroquiaCreateView, ParroquiaUpdateView, ParroquiaDeleteView,
-    CatequistaListView, CatequistaCreateView,CatequistaDetailView,
-    CatequistaUpdateView, CatequistaDeleteView,
-    PadreListView, PadreCreateView, PadreUpdateView,
-    PadreDetailView, PadreDeleteView)
-from .views import (
-    PadrinoListView, PadrinoCreateView, PadrinoUpdateView,
-    PadrinoDeleteView, PadrinoDetailView
-)
+# Importar las urlpatterns individuales de cada archivo
+from gestion.urls.home_urls import urlpatterns as home_urls
+from gestion.urls.curso_urls import urlpatterns as curso_urls
+from gestion.urls.grupo_urls import urlpatterns as grupo_urls
+from gestion.urls.estudiante_urls import urlpatterns as estudiante_urls
+from gestion.urls.catequista_urls import urlpatterns as catequista_urls
+from gestion.urls.padre_urls import urlpatterns as padre_urls
+from gestion.urls.padrino_urls import urlpatterns as padrino_urls
+from gestion.urls.inscripcion_urls import urlpatterns as inscripcion_urls
+from gestion.urls.parroquia_urls import urlpatterns as parroquia_urls
 
-urlpatterns = [
-    path('', home_view, name='home'),
-    path('home/', home_view, name='home'),
-    path('parroquias/', ParroquiaListView.as_view(), name='parroquia_list'),
-    path('parroquias/<int:pk>/', ParroquiaDetailView.as_view(), name='parroquia_detail'),
-    path('parroquias/crear/', ParroquiaCreateView.as_view(), name='parroquia_create'),
-    path('parroquias/<int:pk>/editar/', ParroquiaUpdateView.as_view(), name='parroquia_update'),
-    path('parroquias/<int:pk>/eliminar/', ParroquiaDeleteView.as_view(), name='parroquia_delete'),
-    # Catequistas
-    path('catequistas/', CatequistaListView.as_view(), name='catequista_list'),
-    path('catequistas/crear/', CatequistaCreateView.as_view(), name='catequista_create'),
-    path('catequistas/editar/<int:pk>/', CatequistaUpdateView.as_view(), name='catequista_update'),
-    path('catequistas/<int:pk>/', CatequistaDetailView.as_view(), name='catequista_detail'),
-    path('catequistas/eliminar/<int:pk>/', CatequistaDeleteView.as_view(), name='catequista_delete'),
-    # Padres
-    path('padres/', PadreListView.as_view(), name='padre_list'),
-    path('padres/crear/', PadreCreateView.as_view(), name='padre_create'),
-    path('padres/<int:pk>/editar/', PadreUpdateView.as_view(), name='padre_update'),
-    path('padres/<int:pk>/', PadreDetailView.as_view(), name='padre_detail'),
-    path('padres/<int:pk>/eliminar/', PadreDeleteView.as_view(), name='padre_delete'),
-    # Padrinos
-    path('padrinos/', PadrinoListView.as_view(), name='padrino_list'),
-    path('padrinos/nuevo/', PadrinoCreateView.as_view(), name='padrino_create'),
-    path('padrinos/<int:pk>/editar/', PadrinoUpdateView.as_view(), name='padrino_update'),
-    path('padrinos/<int:pk>/eliminar/', PadrinoDeleteView.as_view(), name='padrino_delete'),
-    path('padrinos/<int:pk>/', PadrinoDetailView.as_view(), name='padrino_detail'),
-   ]
-
+# Unir todas las rutas en una sola lista
+urlpatterns = []
+urlpatterns += home_urls
+urlpatterns += curso_urls
+urlpatterns += grupo_urls
+urlpatterns += estudiante_urls
+urlpatterns += catequista_urls
+urlpatterns += padre_urls
+urlpatterns += padrino_urls
+urlpatterns += inscripcion_urls
+urlpatterns += parroquia_urls
