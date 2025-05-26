@@ -5,7 +5,9 @@ ENABLED_VIEWS = getattr(settings, 'ENABLED_VIEWS', None)
 
 view_files = [
     'catequista_views',
+    'ciclo_views',
     'curso_views',
+    'cursoAnual_views',
     'estudiante_views',
     'grupo_views',
     'inscripcion_views',

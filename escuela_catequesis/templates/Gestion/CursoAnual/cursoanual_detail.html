@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-5">
+    <div class="card shadow-lg">
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+            <h4 class="mb-0">Detalle del Curso Anual</h4>
+            <a href="{% url 'cursoanual_list' %}" class="btn btn-light btn-sm">
+                <i class="bi bi-arrow-left"></i> Volver
+            </a>
+        </div>
+        <div class="card-body">
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">
+                    <strong>Curso:</strong> {{ cursoanual.curso }}
+                </li>
+                <li class="list-group-item">
+                    <strong>Ciclo:</strong> {{ cursoanual.ciclo }}
+                </li>
+                <li class="list-group-item">
+                    <strong>Cupo máximo:</strong> {{ cursoanual.cupo_maximo }}
+                </li>
+                <li class="list-group-item">
+                    <strong>Cerrado:</strong>
+                    {% if cursoanual.cerrado %}
+                        <span class="badge bg-danger">Sí</span>
+                    {% else %}
+                        <span class="badge bg-success">No</span>
+                    {% endif %}
+                </li>
+                <li class="list-group-item">
+                    <strong>Catequistas:</strong>
+                    {% if cursoanual.catequistas.all %}
+                        <ul class="mb-0">
+                            {% for c in cursoanual.catequistas.all %}
+                                <li>{{ c }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <span class="text-muted">Ninguno</span>
+                    {% endif %}
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}

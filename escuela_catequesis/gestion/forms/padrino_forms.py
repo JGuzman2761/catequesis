@@ -75,7 +75,7 @@ class PadrinoForm(forms.ModelForm):
 
             Div(
                 Submit('submit', 'Guardar', css_class='btn btn-primary'),
-                HTML('<a class="btn btn-danger ms-2" href="{% url \'parroquia_list\' %}">Cancelar</a>'
+                HTML('<a class="btn btn-danger ms-2" href="{% url \'padrino_list\' %}">Cancelar</a>'
                 ),
             ),
         )

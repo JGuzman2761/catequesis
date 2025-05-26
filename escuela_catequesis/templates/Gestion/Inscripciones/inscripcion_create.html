@@ -6,9 +6,7 @@
 {% endblock %}
 
 {% block extra_buttons %}
-  <a href="{% url 'lista_inscritos' curso.id %}" class="btn btn-outline-secondary me-2">
-    ← Volver a la lista
-  </a>
+  <a href="{% url 'estudiante_create' %}?next={{ request.path }}" class= 'btn btn-primary me-2'>Registrar nuevo estudiante</a>
   <button type="submit" class="btn btn-success">Guardar inscripción</button>
 {% endblock %}
 

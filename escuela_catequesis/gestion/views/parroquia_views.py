@@ -36,4 +36,4 @@ class ParroquiaUpdateView(UpdateView):
 class ParroquiaDeleteView(DeleteView):
     model = Parroquia
     template_name = 'Gestion/Parroquias/parroquia_delete.html'
-    success_url = reverse_lazy('gestion:parroquia_list')
+    success_url = reverse_lazy('parroquia_list')

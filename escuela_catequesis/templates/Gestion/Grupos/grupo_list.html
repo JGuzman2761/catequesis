@@ -4,38 +4,58 @@
 {% block content %}
 <div class="container mt-4">
   <div class="d-flex justify-content-between align-items-center mb-3">
-    <h2>Lista de Grupos</h2>
+    <h2>Inscripciones para el grupo: {{ grupo.nombre }}</h2>
     <a href="{% url 'grupo_create' %}" class="btn btn-success">+ Nuevo grupo</a>
   </div>
-
+  <form method="get" class="mb-3 d-flex align-items-center">
+    <label for="curso" class="me-2 fw-bold">Filtrar por curso:</label>
+    <select name="curso" id="curso" class="form-select w-auto me-2" onchange="this.form.submit()">
+      <option value="">Todos</option>
+      {% for curso in cursos %}
+        <option value="{{ curso.id }}" {% if curso.id|stringformat:"s" == curso_id %}selected{% endif %}>
+          {{ curso }}
+        </option>
+      {% endfor %}
+    </select>
+    <noscript><button type="submit" class="btn btn-primary btn-sm">Filtrar</button></noscript>
+  </form>
   <table class="table table-striped table-bordered">
     <thead class="table-dark">
       <tr>
-        <th>Código</th>
+        <th>Curso Anual</th>
         <th>Nombre</th>
-       
+        <th>Cupo Máximo</th>
+        <th>Catequistas Asignados</th>
         <th>Acciones</th>
       </tr>
     </thead>
     <tbody>
       {% for grupo in grupos %}
       <tr>
-        <td>{{ grupo.codigo }}</td>
+        <td>{{ grupo.curso_anual }}</td>
         <td>{{ grupo.nombre }}</td>
-      
+        <td>{{ grupo.cupo_maximo }}</td>
         <td>
-          <div class="justify-content-center">
+          {% if grupo.catequistas.all %}
+            {% for c in grupo.catequistas.all %}
+              {{ c.nombres }} {{ c.apellidos }} {% if not forloop.last %}, {% endif %}
+            {% endfor %}
+          {% else %}
+            <span class="text-muted">Ninguno</span>
+          {% endif %}
+        </td>
+        <td>
+          <div class="d-flex gap-1">
             <a href="{% url 'grupo_detail' grupo.pk %}" class="btn btn-info btn-sm">Ver</a>
             <a href="{% url 'grupo_update' grupo.pk %}" class="btn btn-primary btn-sm">Editar</a>
             <a href="{% url 'grupo_delete' grupo.pk %}" class="btn btn-danger btn-sm">Eliminar</a>
           </div>
         </td>
       </tr>
-       {% empty %}
-            <tr><td colspan="6">No hay grupos registrados.</td></tr>
+      {% empty %}
+      <tr><td colspan="5">No hay grupos registrados.</td></tr>
       {% endfor %}
     </tbody>
   </table>
 </div>
-
 {% endblock %}

@@ -3,6 +3,8 @@ from .catequista_forms import CatequistaForm
 from .padre_forms import PadreForm
 from .padrino_forms import PadrinoForm
 from .curso_forms import CursoForm
+from .cursoAnual_forms import CursoAnualForm
 from .estudiante_forms import EstudianteForm
 from .grupo_forms import GrupoForm
 from .inscripcion_forms import InscripcionForm
+from .ciclo_forms import CicloForm

@@ -12,20 +12,25 @@
         <div class="card-body">
             <ul class="list-group list-group-flush">
                 <li class="list-group-item">
-                    <strong>Código:</strong> {{ object.codigo }}
+                    <strong>Curso Anual:</strong> {{ object.curso_anual }}
                 </li>
                 <li class="list-group-item">
-                    <strong>Nombre:</strong> {{ object.nombre }}
+                    <strong>Nombre del Grupo:</strong> {{ object.nombre }}
                 </li>
                 <li class="list-group-item">
-                    <strong>Descripción:</strong> {{ object.descripcion }}
+                    <strong>Cupo Máximo:</strong> {{ object.cupo_maximo }}
                 </li>
                 <li class="list-group-item">
-                    <strong>Requisitos:</strong> {{ object.requisitos_documentos }}
-                </li>
-                <li class="list-group-item text-muted">
-                    <small><i class="bi bi-clock"></i> Creado el: {{ object.fecha_creacion|date:"d/m/Y H:i" }}</small><br>
-                    <small><i class="bi bi-arrow-repeat"></i> Última actualización: {{ object.ultima_actualizacion|date:"d/m/Y H:i" }}</small>
+                    <strong>Catequistas:</strong>
+                    {% if object.catequistas.all %}
+                        <ul class="mb-0">
+                            {% for catequista in object.catequistas.all %}
+                                <li>{{ catequista }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <span class="text-muted">No hay catequistas asignados</span>
+                    {% endif %}
                 </li>
             </ul>
         </div>

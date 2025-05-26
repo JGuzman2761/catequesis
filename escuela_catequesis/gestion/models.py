@@ -100,7 +100,7 @@ class Padre(BaseModel, AuditModel):
     
 class Estudiante(BaseModel, AuditModel):
     padre = models.ForeignKey(Padre, on_delete=models.CASCADE, null=True, blank=True, related_name='estudiantes')
-    padrino = models.OneToOneField(Padrino, on_delete=models.SET_NULL, null=True, blank=True,related_name='estudiante' )
+    padrino = models.ForeignKey(Padrino, on_delete=models.CASCADE, null=True, blank=True,related_name='estudiantes' )
     photo = models.ImageField(upload_to='documentos/Catequisandos/photos/', blank=True, null=True, 
             default='documentos/Catequisandos/photos/default_photo.jpg')
     fecha_nacimiento = models.DateField()
@@ -133,40 +133,46 @@ class Curso(AuditModel):
     
     def __str__(self):
         return f"{self.nombre} - {self.descripcion} - {self.costo}"
-
-    def listar_grupos(self):
-        """
-        Devuelve una lista de los nombres de los grupos asociados al curso.
-        """
-        grupos = Grupo.objects.filter(curso=self)
-        return ", ".join([grupo.nombre for grupo in grupos])
-
-    listar_grupos.short_description = 'Grupos'
-
-class Grupo(AuditModel):
-    codigo = models.CharField(max_length=10, blank=False, unique=True)
-    nombre = models.CharField(max_length=50, blank=False)
-    descripcion = models.CharField(max_length=255, default="Sin descripción")
-    curso = models.ForeignKey(Curso, on_delete=models.CASCADE, to_field="codigo")
-    catequistas = models.ManyToManyField(Catequista, blank=True)  # Relación muchos a muchos
-    max_estudiantes = models.PositiveIntegerField(default=20)  # Límite de estudiantes
-    class Meta:
-        verbose_name = 'Grupo'
-        verbose_name_plural = 'Grupos'
+    
+# CICLO CATEQUESIS: 2024-2025, 2025-2026, etc.
+class CicloCatequesis(models.Model):
+    nombre_ciclo = models.CharField(max_length=100, blank=False, null=False)
+    descripcion = models.TextField(max_length=200,  blank=False, null=False)
+    fecha_inicio = models.DateField()
+    fecha_fin = models.DateField()
+    activo = models.BooleanField(default=True)
+    observaciones = models.TextField(max_length=250,blank=True, null=True)
 
     def __str__(self):
-        return f"{self.nombre} - {self.descripcion} - {self.curso}"
+        return f"{self.nombre_ciclo}-{self.fecha_inicio}-{self.fecha_fin}"
+
+class CursoAnual(models.Model):
+    curso = models.ForeignKey(Curso, on_delete=models.CASCADE)
+    ciclo = models.ForeignKey(CicloCatequesis, on_delete=models.CASCADE)
+    cupo_maximo = models.PositiveIntegerField()
+    catequistas = models.ManyToManyField('Catequista', blank=True)  # <--- Cambiado
+    cerrado = models.BooleanField(default=False)
+
+    def __str__(self):
+       return self.curso.nombre + ' - ' + self.ciclo.nombre_ciclo
+
+class Grupo(models.Model):
+    curso_anual = models.ForeignKey(CursoAnual, on_delete=models.CASCADE)
+    nombre = models.CharField(max_length=50)
+    cupo_maximo = models.PositiveIntegerField(default=20)
+    catequistas = models.ManyToManyField('Catequista', blank=True)  # <--- Cambiado
+
+    def __str__(self):
+        return self.nombre
 
 class Inscripcion(AuditModel):
-    estudiante = models.ForeignKey(Estudiante, on_delete=models.CASCADE)
-    curso = models.ForeignKey(Curso, on_delete=models.CASCADE, to_field="codigo")
-    grupo = models.ForeignKey(Grupo, on_delete=models.CASCADE, to_field="codigo", related_name='inscripciones', null=True, blank=True)
-
+    estudiante = models.ForeignKey('Estudiante', on_delete=models.CASCADE)  # <--- Cambiado
+    grupo = models.ForeignKey(Grupo, on_delete=models.CASCADE)
     fecha_inscripcion = models.DateField(auto_now_add=True)
-    documentos_entregados = models.BooleanField(default=False)
+    aprobado = models.BooleanField(default=False)
 
     class Meta:
-        unique_together = ('estudiante', 'curso')  # Un estudiante no puede inscribirse 2 veces al mismo curso
+        unique_together = ('estudiante', 'grupo')  # Un estudiante no puede inscribirse 2 veces al mismo curso
 
     def __str__(self):
         return f"{self.estudiante} en {self.curso} - {self.grupo}"

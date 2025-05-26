@@ -31,9 +31,26 @@ class EstudianteCreateView(CreateView):
     model = Estudiante
     form_class = EstudianteForm
     template_name = 'Gestion/Estudiantes/estudiante_create.html'
-    success_url = reverse_lazy('estudiante_list')
-    cancel_url = reverse_lazy('estudiante_list')
+    # cancel_url = reverse_lazy('estudiante_list')
     title = 'Crear Estudiante'
+
+    def get_success_url(self):
+        return self.request.POST.get('next') or self.request.GET.get('next') or reverse_lazy('estudiante_list')
+    
+    def get_cancel_url(self):
+        return self.request.POST.get('next') or self.request.GET.get('next') or reverse_lazy('estudiante_list')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['next'] = self.request.GET.get('next', '')
+        context['cancel_url'] = self.get_cancel_url()
+        return context
+
+    def form_valid(self, form):
+        if not form.instance.pk:
+            form.instance.creado_por = self.request.user
+        form.instance.actualizado_por = self.request.user
+        return super().form_valid(form)
 
 class EstudianteUpdateView(UpdateView):
     model = Estudiante
@@ -42,6 +59,10 @@ class EstudianteUpdateView(UpdateView):
     success_url = reverse_lazy('estudiante_list')
     cancel_url = reverse_lazy('estudiante_list')
     title = 'Actualizar estudiante'
+
+    def form_valid(self, form):
+        form.instance.actualizado_por = self.request.user
+        return super().form_valid(form)
 
 class EstudianteDeleteView(DeleteView):
     model = Estudiante

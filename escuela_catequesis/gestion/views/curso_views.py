@@ -7,7 +7,7 @@ class CursoListView(ListView):
     model = Curso
     template_name = 'Gestion/Cursos/curso_list.html'
     context_object_name = 'cursos'
-
+    
 class CursoDetailView(DetailView):
     model = Curso
     template_name = 'Gestion/Cursos/curso_detail.html'
@@ -21,6 +21,11 @@ class CursoCreateView(CreateView):
     success_url = reverse_lazy('curso_list')
     cancel_url = reverse_lazy('curso_list')
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['cancel_url'] = self.cancel_url  # ✅ Asegúrate de incluir esto
+        return context
+
 class CursoUpdateView(UpdateView):
     model = Curso
     form_class = CursoForm
@@ -28,6 +33,11 @@ class CursoUpdateView(UpdateView):
     title = 'Actualizar curso'
     success_url = reverse_lazy('curso_list')
     cancel_url = reverse_lazy('curso_list')
+     
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['cancel_url'] = self.cancel_url  # ✅ Asegúrate de incluir esto
+        return context
 
 class CursoDeleteView(DeleteView):
     model = Curso

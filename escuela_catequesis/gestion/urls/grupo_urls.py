@@ -1,11 +1,15 @@
+# urls.py
 from django.urls import path
-from gestion.views import GrupoListView, GrupoCreateView, GrupoUpdateView, GrupoDeleteView, GrupoDetailView
-
+from ..views import (
+    GrupoListView, GrupoDetailView,
+    GrupoCreateView, GrupoUpdateView,
+    GrupoDeleteView,
+)
 
 urlpatterns = [
-    path('grupos/', GrupoListView.as_view(), name='grupo_list'),
-    path('grupos/<int:pk>/', GrupoDetailView.as_view(), name='grupo_detail'),
-    path('grupos/create/', GrupoCreateView.as_view(), name='grupo_create'),
-    path('grupos/update/<int:pk>/', GrupoUpdateView.as_view(), name='grupo_update'),
-    path('grupos/delete/<int:pk>/', GrupoDeleteView.as_view(), name='grupo_delete'),
+    path('grupo/', GrupoListView.as_view(), name='grupo_list'),
+    path('grupo/<int:pk>/', GrupoDetailView.as_view(), name='grupo_detail'),
+    path('grupo/crear/', GrupoCreateView.as_view(), name='grupo_create'),
+    path('grupo/<int:pk>/editar/', GrupoUpdateView.as_view(), name='grupo_update'),
+    path('grupo/<int:pk>/eliminar/', GrupoDeleteView.as_view(), name='grupo_delete'),
 ]

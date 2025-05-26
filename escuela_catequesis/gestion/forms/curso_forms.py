@@ -44,11 +44,12 @@ class CursoForm(forms.ModelForm):
                     Column(Field('acta_bautizmo'), css_class='col-md-3 mb-2'),
                     Column(Field('acta_comunion'), css_class='col-md-3 mb-2'),
                     Column(Field('acta_matrimonio'), css_class='col-md-3 mb-2'),
-                )
+                ),
+                Div(
+                    Submit('submit', 'Guardar', css_class='btn btn-primary'),
+                    HTML('<a class="btn btn-danger ms-2" href="{% url \'curso_list\' %}">Cancelar</a>'
+                    ),
+                ),
             ),
-            Div(
-                Submit('submit', 'Guardar', css_class='btn btn-primary'),
-                HTML('<a class="btn btn-danger ms-2" href="{% url \'curso_list\' %}">Cancelar</a>'),
-                css_class='mt-3'
-            )
+           
         )
