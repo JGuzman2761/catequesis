@@ -1,7 +1,46 @@
 # 📘 Proyecto Catequesis
 
-Este proyecto es una aplicación web desarrollada en Django para la gestión de cursos de catequesis en una parroquia. Permite el registro de estudiantes, catequistas, padrinos y representantes, 
-así como la configuración de grupos y control de documentos requeridos como actas de bautismo y primera comunión.
+# Catequesis
+
+### 🌐 Aplicación web para la gestión de cursos de catequesis en una parroquia
+
+## 📋 Descripción (Español)
+
+Este proyecto es una aplicación web desarrollada en Django para la gestión de cursos de catequesis en una parroquia.  
+Permite el registro de estudiantes, catequistas, padrinos y representantes, así como la configuración de grupos y control de documentos requeridos como actas de bautismo y primera comunión.
+
+---
+
+## 📋 Description (Français)
+
+Ce projet est une application web développée avec Django pour la gestion des cours de catéchèse dans une paroisse.  
+Il permet l'enregistrement des étudiants, des catéchistes, des parrains et des représentants, ainsi que la configuration des groupes et le contrôle des documents requis tels que les actes de baptême et de première communion.
+
+---
+
+## 📋 Description (English)
+
+This project is a web application developed with Django for managing catechesis courses in a parish.  
+It allows the registration of students, catechists, godparents, and representatives, as well as the configuration of groups and management of required documents such as baptism and first communion certificates.
+
+---
+
+## 🚀 Tecnologías utilizadas
+
+- Python 3.x
+- Django
+- Django Crispy Forms
+- SQLite / PostgreSQL (según configuración)
+- HTML, CSS (Bootstrap)
+
+---
+
+## ⚙️ Configuración
+
+1. Clona el repositorio:
+   ```bash
+   git clone https://github.com/tu_usuario/catequesis.git
+   cd catequesis
 
 ---
 
