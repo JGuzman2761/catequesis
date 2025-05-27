@@ -1,0 +1,14 @@
+{% extends 'shared/base_form.html' %}
+
+{% block form_title %}
+    {{ title|default:'Registrar Curso' }}
+{% endblock %}
+
+{% block form_content %}
+    {{ form|crispy }}
+{% endblock %}
+
+{% block form_actions %}
+    <button type="submit" class="btn btn-success">Guardar</button>
+    <a href="{{ cancel_url|default:'/' }}" class="btn btn-secondary">Cancelar</a>
+{% endblock %}

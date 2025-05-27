@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="card shadow rounded">
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+            <h4 class="mb-0">{{ title|default:'Detalle de la Inscripción' }}</h4>
+            <a href="{{ cancel_url|default:request.META.HTTP_REFERER|default:'/' }}" class="btn btn-light btn-sm">
+                <i class="bi bi-arrow-left"></i> Volver
+            </a>
+        </div>
+        <div class="card-body">
+            <p><strong>Estudiante:</strong> {{ inscripcion.estudiante.nombres }} {{ inscripcion.estudiante.apellidos }}</p>
+            <p><strong>Padre o madre:</strong>
+                {% if inscripcion.estudiante.padre %}
+                    {{ inscripcion.estudiante.padre.nombres }} {{ inscripcion.estudiante.padre.apellidos }}
+                {% else %}
+                    <span class="text-muted">No registrado</span>
+                {% endif %}
+            </p>
+            <p><strong>Padrinos:</strong>
+                {% if inscripcion.padrinos.all %}
+                    {% for padrino in inscripcion.padrinos.all %}
+                        {{ padrino.nombres }} {{ padrino.apellidos }}{% if not forloop.last %}, {% endif %}
+                    {% endfor %}
+                {% else %}
+                    <span class="text-muted">No registrado</span>
+                {% endif %}
+            </p>
+            <p><strong>Grupo:</strong> {{ inscripcion.grupo }}</p>
+            <p><strong>Fecha de inscripción:</strong> {{ inscripcion.fecha_inscripcion|date:'d/m/Y' }}</p>
+            <p><strong>Aprobado:</strong> {{ inscripcion.aprobado|yesno:"Sí,No" }}</p>
+        </div>
+        <div class="card-footer text-end">
+            <a href="{% url 'inscripcion_update' inscripcion.grupo.id inscripcion.pk %}" class="btn btn-warning">Editar</a>
+            <a href="{{ cancel_url|default:'/' }}" class="btn btn-secondary">Volver</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
