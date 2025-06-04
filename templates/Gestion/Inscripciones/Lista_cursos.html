@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Cursos Disponibles{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+  <h2 class="mb-4">Selecciona un Curso</h2>
+  <div class="row">
+    {% for curso in cursos %}
+    <div class="col-md-4 mb-4">
+      <div class="card shadow-sm h-100">
+        <div class="card-body">
+          <h5 class="card-title">{{ curso.nombre }}</h5>
+          <p class="card-text"><strong>Código:</strong> {{ curso.codigo }}</p>
+          <p class="card-text"><strong>Costo:</strong> ${{ curso.costo }}</p>
+          <p class="card-text"><strong>Requisitos:</strong></p>
+          <ul>
+            {% if curso.acta_bautizmo %}<li>Acta de Bautismo</li>{% endif %}
+            {% if curso.acta_nacimiento %}<li>Acta de Nacimiento</li>{% endif %}
+            {% if curso.acta_comunion %}<li>Acta de Comunión</li>{% endif %}
+            {% if curso.acta_matrimonio %}<li>Acta de Matrimonio</li>{% endif %}
+            {% if not curso.acta_bautizmo and not curso.acta_nacimiento and not curso.acta_comunion and not curso.acta_matrimonio %}
+              <li>Sin requisitos obligatorios</li>
+            {% endif %}
+          </ul>
+          <a href="{% url 'lista_inscritos' curso.id %}" class="btn btn-primary">Ver Inscritos</a>
+        </div>
+      </div>
+    </div>
+    {% empty %}
+    <p>No hay cursos disponibles.</p>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

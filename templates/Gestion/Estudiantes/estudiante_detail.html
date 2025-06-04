@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="card shadow-lg mx-auto" style="max-width: 900px;">
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+            <h4 class="mb-0">{{ title|default:'Detalle del Estudiante' }}</h4>
+            <a href="{{ cancel_url|default:request.META.HTTP_REFERER|default:'/' }}" class="btn btn-light btn-sm">
+                <i class="bi bi-arrow-left"></i> Volver
+            </a>
+        </div>
+        <div class="card-body row">
+            <!-- Foto del estudiante -->
+            <div class="col-md-4 text-center mb-3">
+                {% if object.photo %}
+                    <img src="{{ object.photo.url }}" alt="Foto" class="img-thumbnail rounded-circle mb-2" width="150" height="150" onerror="this.onerror=null;this.src='/static/img/default-user.png';">
+                {% else %}
+                    <img src="/static/img/default-user.png" alt="Sin foto" class="img-thumbnail rounded-circle mb-2" width="150" height="150">
+                {% endif %}
+            </div>
+            <!-- Datos del estudiante -->
+            <div class="col-md-8">
+                <h4 class="card-title mb-3">{{ object.nombres }} {{ object.apellidos }}</h4>
+                <table class="table table-borderless table-sm">
+                    <tbody>
+                        <tr>
+                            <th class="text-end" style="width: 40%;">Teléfono:</th>
+                            <td>{{ object.telefono }}</td>
+                        </tr>
+                        <tr>
+                            <th class="text-end">Email:</th>
+                            <td>{{ object.email }}</td>
+                        </tr>
+                        <tr>
+                            <th class="text-end">Fecha de nacimiento:</th>
+                            <td>{{ object.fecha_nacimiento|date:'d/m/Y' }}</td>
+                        </tr>
+                        <tr>
+                            <th class="text-end">Padre:</th>
+                            <td>{{ object.padre }}</td>
+                        </tr>
+                        <tr>
+                            <th class="text-end">Padrino(s):</th>
+                            <td>
+                                {% for padrino in object.padrino.all %}
+                                    {{ padrino }}{% if not forloop.last %}, {% endif %}
+                                {% empty %}
+                                    <em>Sin padrinos</em>
+                                {% endfor %}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <hr class="my-3">
+                <p class="col-md-6 text-muted mb-0">
+                    <small><i class="bi bi-clock"></i> Creado el: {{ object.fecha_creacion|date:'d/m/Y H:i' }}</small><br>
+                    <small><i class="bi bi-arrow-repeat"></i> Actualizado: {{ object.ultima_actualizacion|date:'d/m/Y H:i' }}</small>
+                </p>
+            </div>
+        </div>
+        <div class="card-footer d-flex justify-content-end gap-2">
+            <a href="{% url 'estudiante_update' object.pk %}" class="btn btn-primary">Editar</a>
+            <a href="{% url 'estudiante_delete' object.pk %}" class="btn btn-danger">Eliminar</a>
+            <a href="{{ cancel_url|default:'/' }}" class="btn btn-secondary">Volver</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

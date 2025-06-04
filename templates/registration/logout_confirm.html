@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}Confirmar Logout{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="mb-0">Confirmar Cierre de Sesión</h3>
+                </div>
+                <div class="card-body">
+                    <p>¿Estás seguro de que quieres cerrar tu sesión?</p>
+                    <form method="post">
+                        {% csrf_token %}
+                        <button type="submit" name="confirm" class="btn btn-danger me-2">Sí, Cerrar Sesión</button>
+                        <button type="submit" name="cancel" class="btn btn-secondary">Cancelar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
