@@ -17,8 +17,17 @@
             <h1 class="h4 mb-0 text-secondary">Sistema Escuela de Catequesis</h1>
         </div>
         <div class="d-none d-md-block text-end">
-            <span class="text-muted">Bienvenido(a)</span>
-            <i class="bi bi-person-circle fs-4 text-secondary ms-2"></i>
+            {% if user.is_authenticated %}
+                <span class="text-muted">Bienvenido(a), <strong>{{ user.username }}</strong></span>
+                {% if user.profile.photo %}
+                    <img src="{{ user.profile.photo.url }}" alt="Foto de Perfil" class="rounded-circle ms-2" width="40" height="40">
+                {% else %}
+                    <i class="bi bi-person-circle fs-4 text-secondary ms-2"></i>
+                {% endif %}
+                <a href="{% url 'logout' %}" class="btn btn-outline-danger btn-sm ms-2">Logout</a>
+            {% else %}
+                <a href="{% url 'login' %}" class="btn btn-outline-primary btn-sm">Iniciar Sesión</a>
+            {% endif %}
         </div>
     </header>
 
@@ -39,9 +48,6 @@
                             <ul class="nav flex-column fw-bold fs-6">
                                 <li class="nav-item mb-2">
                                     <a class="nav-link text-white" href="{% url 'parroquia_list' %}"><i class="bi bi-building"></i> Parroquias</a>
-                                </li>
-                                <li class="nav-item mb-2">
-                                    <a class="nav-link text-white" href="{% url 'curso_list' %}"><i class="bi bi-book-fill"></i> Cursos</a>
                                 </li>
                                 <li class="nav-item mb-2">
                                     <a class="nav-link text-white" href="{% url 'catequista_list' %}"><i class="bi bi-person-fill"></i> Catequistas</a>
@@ -71,6 +77,9 @@
                         <div class="accordion-body p-0">
                             <ul class="nav flex-column fw-bold fs-6">
                                 <li class="nav-item mb-2">
+                                    <a class="nav-link text-white" href="{% url 'curso_list' %}"><i class="bi bi-book-fill"></i> Cursos</a>
+                                </li>
+                                <li class="nav-item mb-2">
                                     <a class="nav-link text-white" href="{% url 'cursoanual_list' %}"><i class="bi bi-book-fill"></i> Cursos Anuales</a>
                                 </li>
                                 <li class="nav-item mb-2">
@@ -82,7 +91,6 @@
                                 <li class="nav-item mb-2">
                                     <a class="nav-link text-white" href="{% url 'inscripcion_card_list' %}"><i class="bi bi-card-checklist"></i> Inscripciones</a>
                                 </li>
-                               
                             </ul>
                         </div>
                     </div>

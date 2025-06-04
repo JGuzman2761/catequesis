@@ -1,9 +1,10 @@
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.contrib.auth.mixins import LoginRequiredMixin # Importar LoginRequiredMixin
 from ..models import Padre
 from ..forms.padre_forms import PadreForm
 
-class PadreListView(ListView):
+class PadreListView(LoginRequiredMixin, ListView):
     model = Padre
     template_name = 'Gestion/Padres/padre_list.html'
     context_object_name = 'padres'
@@ -41,7 +42,7 @@ class PadreUpdateView(UpdateView):
         context['view'] = self
         return context
 
-class PadreDeleteView(DeleteView):
+class PadreDeleteView(LoginRequiredMixin, DeleteView): # Agregar LoginRequiredMixin
     model = Padre
     template_name = 'Gestion/Padres/padre_delete.html'
     success_url = reverse_lazy('padre_list')

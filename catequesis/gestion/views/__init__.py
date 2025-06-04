@@ -14,6 +14,7 @@ view_files = [
     'padre_views',
     'padrino_views',
     'parroquia_views',
+    'profile_views', # Agregamos la vista de perfil
 ]
 
 if ENABLED_VIEWS is None:

@@ -130,7 +130,7 @@ class Curso(AuditModel):
     codigo = models.CharField(max_length=10, blank=False, unique=True)
     nombre = models.CharField(max_length=100, blank=False)
     descripcion = models.CharField(max_length=255, default="Sin descripción")
-    acta_bautizmo = models.BooleanField(default=False,verbose_name="Acta bautizmo")
+    acta_bautismo = models.BooleanField(default=False,verbose_name="Acta bautismo")
     acta_nacimiento = models.BooleanField(default=False,verbose_name="Acta nacimiento")
     acta_comunion = models.BooleanField(default=False,verbose_name="Acta comunión")
     acta_matrimonio = models.BooleanField(default=False,verbose_name="Acta Matrimonio")
@@ -204,4 +204,20 @@ class Inscripcion(AuditModel):
     def __str__(self):
         return f"{self.estudiante} en {self.grupo}"
 
+class Profile(models.Model):
+    """Modelo para perfiles de usuario personalizados."""
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    photo = models.ImageField(
+        verbose_name="Foto de Perfil",
+        upload_to='perfiles/fotos/',
+        null=True,
+        blank=True,
+        default='perfiles/fotos/default_profile.jpg'
+    )
 
+    class Meta:
+        verbose_name = 'Perfil de Usuario'
+        verbose_name_plural = 'Perfiles de Usuario'
+
+    def __str__(self):
+        return f'Perfil de {self.user.username}'

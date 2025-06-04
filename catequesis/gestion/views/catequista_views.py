@@ -1,9 +1,10 @@
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.contrib.auth.mixins import LoginRequiredMixin # Importar LoginRequiredMixin
 from ..models import Catequista
 from ..forms.catequista_forms import CatequistaForm
 
-class CatequistaListView(ListView):
+class CatequistaListView(LoginRequiredMixin, ListView):
     model = Catequista
     template_name = 'gestion/Catequistas/catequista_list.html'
     context_object_name = 'catequistas'
@@ -42,7 +43,7 @@ class CatequistaDetailView(DetailView):
     template_name = 'gestion/Catequistas/catequista_detail.html'
     context_object_name = 'catequista'
 
-class CatequistaDeleteView(DeleteView):
+class CatequistaDeleteView(LoginRequiredMixin, DeleteView): # Agregar LoginRequiredMixin
     model = Catequista
     template_name = 'gestion/Catequistas/catequista_delete.html'
     success_url = reverse_lazy('catequista_list')

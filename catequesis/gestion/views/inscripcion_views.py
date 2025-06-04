@@ -2,13 +2,14 @@ from django.urls import reverse_lazy, reverse
 from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin # Importar LoginRequiredMixin
 # from django.contrib.auth.models import User
 from django.db.models import Q
 from ..models import Estudiante, Grupo, Inscripcion
 from ..forms import EstudianteForm, GrupoForm, InscripcionForm
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
-class InscripcionListView(ListView):
+class InscripcionListView(LoginRequiredMixin, ListView):
     model = Inscripcion
     template_name = 'Gestion/Inscripciones/inscripcion_list.html'
     context_object_name = 'inscripciones'
@@ -130,7 +131,7 @@ class InscripcionDetailView(DetailView):
         context['grupo'] = grupo
         return context
 
-class InscripcionDeleteView(DeleteView):
+class InscripcionDeleteView(LoginRequiredMixin, DeleteView): # Agregar LoginRequiredMixin
     model = Inscripcion
     template_name = 'Gestion/Inscripciones/inscripcion_delete.html'
     title = 'Eliminar Inscripción'

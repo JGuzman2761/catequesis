@@ -1,10 +1,11 @@
 from django.urls import reverse_lazy
 from django.db.models import Q
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.contrib.auth.mixins import LoginRequiredMixin # Importar LoginRequiredMixin
 from ..models import Estudiante
 from ..forms.estudiante_forms import EstudianteForm
 
-class EstudianteListView(ListView):
+class EstudianteListView(LoginRequiredMixin, ListView):
     model = Estudiante
     template_name = 'Gestion/Estudiantes/estudiante_list.html'
     context_object_name = 'estudiantes'
@@ -71,7 +72,7 @@ class EstudianteUpdateView(UpdateView):
         form.instance.actualizado_por = self.request.user
         return super().form_valid(form)
 
-class EstudianteDeleteView(DeleteView):
+class EstudianteDeleteView(LoginRequiredMixin, DeleteView): # Agregar LoginRequiredMixin
     model = Estudiante
     template_name = 'Gestion/Estudiantes/estudiante_delete.html'
     success_url = reverse_lazy('estudiante_list')

@@ -125,3 +125,17 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
+
+# Especifica el modelo de perfil personalizado
+AUTH_PROFILE_MODULE = 'gestion.Profile'
+
+# URL a la que se redirige para iniciar sesión (usado por @login_required y LoginRequiredMixin)
+LOGIN_URL = '/accounts/login/'
+
+# URL a la que se redirige después de un inicio de sesión exitoso
+LOGIN_REDIRECT_URL = '/' # Redirigir a la página de inicio
+
+# URL a la que se redirige después de cerrar sesión
+LOGOUT_REDIRECT_URL = '/' # Redirigir a la página de inicio
+
+CRISPY_TEMPLATE_PACK = "bootstrap5"

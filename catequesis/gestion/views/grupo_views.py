@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, UpdateView, DeleteView, ListView, DetailView
+from django.contrib.auth.decorators import login_required # Importar login_required
+from django.contrib.auth.mixins import LoginRequiredMixin # Importar LoginRequiredMixin
 from ..models import Grupo, Catequista, CursoAnual # Asegúrate de importar tus modelos
 from ..forms import GrupoForm # Asume que GrupoForm está en forms.py
 import json # Para pasar datos a JSON en el template
@@ -125,7 +127,7 @@ class GrupoListView(ListView):
         context['view'] = self
         return context
 
-class GrupoDetailView(DetailView):
+class GrupoDetailView(LoginRequiredMixin, DetailView): # Agregar LoginRequiredMixin
     model = Grupo
     template_name = 'Gestion/Grupos/grupo_detail.html'
     context_object_name = 'grupo'

@@ -1,9 +1,10 @@
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView, DetailView
 from django.urls import reverse_lazy
+from django.contrib.auth.mixins import LoginRequiredMixin # Importar LoginRequiredMixin
 from ..models import CursoAnual
 from ..forms import CursoAnualForm
 
-class CursoAnualListView(ListView):
+class CursoAnualListView(LoginRequiredMixin, ListView):
     model = CursoAnual
     template_name = 'Gestion/CursoAnual/cursoanual_list.html'
     context_object_name = 'cursos_anuales'
@@ -48,7 +49,7 @@ class CursoAnualDeleteView(DeleteView):
         context['view'] = self
         return context
 
-class CursoAnualDetailView(DetailView):
+class CursoAnualDetailView(LoginRequiredMixin, DetailView): # Agregar LoginRequiredMixin
     model = CursoAnual
     template_name = 'Gestion/CursoAnual/cursoanual_detail.html'
     context_object_name = 'cursoanual'

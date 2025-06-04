@@ -5,7 +5,7 @@ from ..forms.parroquia_forms import ParroquiaForm
 from django.contrib.auth.mixins import LoginRequiredMixin # ¡Buena práctica añadir seguridad!
 from django.contrib import messages # Para mostrar mensajes al usuario
 
-class ParroquiaListView(ListView):
+class ParroquiaListView(LoginRequiredMixin, ListView):
     model = Parroquia
     template_name = 'Gestion/Parroquias/parroquia_list.html'
     context_object_name = 'parroquias'
@@ -45,7 +45,7 @@ class ParroquiaUpdateView(UpdateView):
         return context
 
 
-class ParroquiaDeleteView(DeleteView):
+class ParroquiaDeleteView(LoginRequiredMixin, DeleteView): # Agregar LoginRequiredMixin
     model = Parroquia
     template_name = 'Gestion/Parroquias/parroquia_delete.html'
     success_url = reverse_lazy('parroquia_list')

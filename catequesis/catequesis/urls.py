@@ -3,6 +3,7 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
 from gestion.views.home_view import home_view
+from gestion.views import profile_views # Importar las vistas de perfil
 
 
 urlpatterns = [
@@ -19,6 +20,9 @@ urlpatterns = [
     path('parroquia/', include('gestion.urls.parroquia_urls')),
     path('padre/', include('gestion.urls.padre_urls')),
     path('padrino/', include('gestion.urls.padrino_urls')),
+    # Sobrescribir la URL de logout para usar la vista de confirmación
+    path('accounts/logout/', profile_views.logout_confirm_view, name='logout'), # Corregir referencia a la vista
+    path('accounts/', include('django.contrib.auth.urls')), # Incluir URLs de autenticación de Django
 ]
 
 # Agregar rutas para servir archivos media en desarrollo

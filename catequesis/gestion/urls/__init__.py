@@ -9,4 +9,5 @@ from .parroquia_urls import *
 from .padrino_urls import *
 from .padre_urls import *
 from .inscripcion_urls import *
-# 
+from .profile_urls import * # Incluimos las URLs del perfil
+#

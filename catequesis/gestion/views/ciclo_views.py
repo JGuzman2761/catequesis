@@ -1,10 +1,11 @@
 from django.urls import reverse_lazy
 from django.shortcuts import get_object_or_404
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView, DetailView
+from django.contrib.auth.mixins import LoginRequiredMixin # Importar LoginRequiredMixin
 from gestion.models import CicloCatequesis
 from gestion.forms.ciclo_forms import CicloForm
 
-class CicloListView(ListView):
+class CicloListView(LoginRequiredMixin, ListView):
     model = CicloCatequesis
     template_name = 'gestion/Ciclo/lista_ciclo.html'
     context_object_name = 'ciclos'
@@ -50,7 +51,7 @@ class CicloDeleteView(DeleteView):
         context['view'] = self
         return context
 
-class CicloDetailView(DetailView):
+class CicloDetailView(LoginRequiredMixin, DetailView): # Agregar LoginRequiredMixin
     model = CicloCatequesis
     template_name = 'Gestion/Ciclo/detail_ciclo.html'
     context_object_name = 'ciclo'
