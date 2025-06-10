@@ -1,0 +1,10 @@
+{% extends 'shared/base_form.html' %}
+{% load crispy_forms_tags %}
+
+{% block form_title %}
+    {{ title|default:'Registrar Curso Anual' }}
+{% endblock %}
+
+{% block extra_form_buttons %}
+    <a href="{{ cancel_url|default:request.META.HTTP_REFERER|default:'/' }}" class="btn btn-danger ms-2">Cancelar</a>
+{% endblock %}

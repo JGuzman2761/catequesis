@@ -1,0 +1,24 @@
+{% extends 'shared/base_form.html' %}
+
+{% block form_title %}
+    {{ title|default:'Registrar Estudiante' }}
+{% endblock %}
+
+{% block form_content %}
+    {% if form.photo %}
+        <div class="mb-3 text-center">
+            {% if form.instance.photo %}
+                <img src="{{ form.instance.photo.url }}" alt="Foto actual" class="rounded-circle mb-2" width="100" height="100" onerror="this.onerror=null;this.src='/static/img/default-user.png';">
+            {% else %}
+                <img src="/static/img/default-user.png" alt="Sin foto" class="rounded-circle mb-2" width="100" height="100">
+            {% endif %}
+        </div>
+    {% endif %}
+    {{ form|crispy }}
+{% endblock %}
+
+{% block form_actions %}
+    <button type="submit" class="btn btn-success">Guardar</button>
+    <a href="{{ cancel_url|default:'/' }}" class="btn btn-secondary">Cancelar</a>
+{% endblock %}
+

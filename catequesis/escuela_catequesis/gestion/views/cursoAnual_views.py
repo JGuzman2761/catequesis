@@ -1,0 +1,45 @@
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView, DetailView
+from django.urls import reverse_lazy
+from ..models import CursoAnual
+from ..forms import CursoAnualForm
+
+class CursoAnualListView(ListView):
+    model = CursoAnual
+    template_name = 'Gestion/CursoAnual/cursoanual_list.html'
+    context_object_name = 'cursos_anuales'
+
+class CursoAnualCreateView(CreateView):
+    model = CursoAnual
+    form_class = CursoAnualForm
+    template_name = 'Gestion/CursoAnual/cursoanual_create.html'
+    cancel_url = reverse_lazy('cursoanual_list')
+    success_url = reverse_lazy('cursoanual_list')
+    title = "Crear Curso anual"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['cancel_url'] = self.cancel_url  # ✅ Asegúrate de incluir esto
+        return context
+
+class CursoAnualUpdateView(UpdateView):
+    model = CursoAnual
+    form_class = CursoAnualForm
+    template_name = 'Gestion/CursoAnual/cursoanual_create.html'
+    success_url = reverse_lazy('cursoanual_list')
+    cancel_url = reverse_lazy('cursoanual_list')
+    title = "Modificar Curso anual"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['cancel_url'] = self.cancel_url  # ✅ Asegúrate de incluir esto
+        return context
+
+class CursoAnualDeleteView(DeleteView):
+    model = CursoAnual
+    template_name = 'Gestion/CursoAnual/cursoanual_delete.html'
+    success_url = reverse_lazy('cursoanual_list')
+
+class CursoAnualDetailView(DetailView):
+    model = CursoAnual
+    template_name = 'Gestion/CursoAnual/cursoanual_detail.html'
+    context_object_name = 'cursoanual'

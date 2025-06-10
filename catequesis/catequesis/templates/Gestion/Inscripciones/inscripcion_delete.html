@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-4">
+    <h2>{{ title|default:'Eliminar Inscripción' }}</h2>
+    <p class="text-danger">¿Estás seguro de que deseas eliminar la inscripción de <strong>{{ inscripcion.estudiante }}</strong> al grupo <strong>{{ inscripcion.grupo }}</strong>?</p>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Eliminar</button>
+        <a href="{{ cancel_url|default:'/' }}" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,152 @@
+{% extends 'base.html' %} {# O tu plantilla base #}
+{% load static %} {# Asegúrate de tener static cargado si usas archivos estáticos locales #}
+
+{% block content %}
+<div class="container card-body bg-secondary text-white mt-2 ps-3">
+    <h2>{% if form.instance.pk %}Editar Grupo{% else %}Crear Grupo{% endif %}</h2> {# Mejor forma de detectar si es edición #}
+
+    <form method="post">
+        {% csrf_token %}
+
+        {# Campos del Modelo Grupo #}
+        <div class="row">
+            <div class="col-md-5 mb-3">
+                <label for="{{ form.curso_anual.id_for_label }}" class="form-label">{{ form.curso_anual.label }}</label>
+                {{ form.curso_anual }}
+                {% if form.curso_anual.errors %}<div class="invalid-feedback d-block">{{ form.curso_anual.errors }}</div>{% endif %}
+            </div>
+            <div class="col-md-5 mb-3">
+                <label for="{{ form.nombre.id_for_label }}" class="form-label">{{ form.nombre.label }}</label>
+                {{ form.nombre }}
+                {% if form.nombre.errors %}<div class="invalid-feedback d-block">{{ form.nombre.errors }}</div>{% endif %}
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-2 mb-3">
+                <label for="{{ form.cupo_maximo.id_for_label }}" class="form-label">{{ form.cupo_maximo.label }}</label>
+                {{ form.cupo_maximo }}
+                {% if form.cupo_maximo.errors %}<div class="invalid-feedback d-block">{{ form.cupo_maximo.errors }}</div>{% endif %}
+            </div>
+        </div>
+
+        {# Widget personalizado para Catequistas #}
+        <div class="mb-3 mt-2">
+            <h4 class="form-label text-center me-md-5">Catequistas</h4>
+            {# Mostrar errores generales del campo catequistas si los hay #}
+            {% if form.catequistas.errors %}<div class="alert alert-danger">{{ form.catequistas.errors }}</div>{% endif %}
+
+            <div class="row">
+                {# Caja de Disponibles #}
+                <div class="col-md-5 ">
+                    <label for="catequistas-disponibles" class="form-label">Disponibles</label>
+                    <select multiple class="form-control" id="catequistas-disponibles" size="8"> {# Ajusta el tamaño si quieres #}
+                        {# Las opciones se llenarán con JS #}
+                    </select>
+                </div>
+
+                {# Botones de Mover #}
+                <div class="col-md-1 mt-4 text-center align-self-center">
+                    <button type="button" id="btn-add" class="btn btn-warning mb-2 w-100" title="Agregar seleccionado">></button>
+                    <button type="button" id="btn-add-all" class="btn btn-warning mb-2 w-100" title="Agregar todos">>></button>
+                    <button type="button" id="btn-remove" class="btn btn-warning mb-2 w-100" title="Quitar seleccionado"><</button>
+                    <button type="button" id="btn-remove-all" class="btn btn-warning w-100" title="Quitar todos"><<</button>
+                </div>
+
+                <div class="col-md-5">
+                    <label for="{{ form.catequistas.id_for_label }}" class="form-label">Seleccionados</label>
+                  
+                    <div style="display: none;">
+                        {{ form.catequistas }}
+                    </div>
+                    {# Nuestro <select> visible que el JS manipulará #}
+                    <select multiple class="form-control" id="catequistas-seleccionados-visible" name="{{ form.catequistas.name }}" size="8">
+                       
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary mt-3">Guardar</button>
+        <a href="{% url 'grupo_list' %}" class="btn btn-danger mt-3 ps-2">Cancelar</a> {# Asegúrate que 'grupo_list' sea tu URL correcta #}
+    </form>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Asume que tu vista pasa 'todos_catequistas_json' y 'catequistas_seleccionados_ids_json'
+    // Estos deben ser strings JSON para que JSON.parse funcione correctamente.
+    const todosCatequistas = JSON.parse('{{ todos_catequistas_json|default:"[]"|escapejs }}');
+    const seleccionadosInicialesIds = JSON.parse('{{ catequistas_seleccionados_ids_json|default:"[]"|escapejs }}');
+
+    const selectDisponibles = document.getElementById('catequistas-disponibles');
+    const selectSeleccionadosVisible = document.getElementById('catequistas-seleccionados-visible');
+    
+    // Opcional: si quieres sincronizar con el campo oculto del formulario de Django
+    // const selectSeleccionadosFormulario = document.getElementById('{{ form.catequistas.id_for_label }}');
+
+    // --- Función para poblar las listas ---
+    function poblarListas() {
+        selectDisponibles.innerHTML = '';
+        selectSeleccionadosVisible.innerHTML = ''; // Limpia nuestro select visible
+
+        todosCatequistas.forEach(cat => {
+            // cat debería ser un objeto como {id: 1, text: "Nombre Catequista"}
+            const option = new Option(cat.text, cat.id);
+            if (seleccionadosInicialesIds.includes(cat.id)) {
+                selectSeleccionadosVisible.appendChild(option);
+            } else {
+                selectDisponibles.appendChild(option);
+            }
+        });
+    }
+
+    // --- Funciones de Movimiento ---
+    function moverOpciones(origenSelect, destinoSelect) {
+        Array.from(origenSelect.selectedOptions).forEach(option => {
+            destinoSelect.appendChild(option);
+        });
+    }
+
+    function moverTodo(origenSelect, destinoSelect) {
+        Array.from(origenSelect.options).forEach(option => {
+             destinoSelect.appendChild(option);
+        });
+    }
+
+    // --- Event Listeners para botones ---
+    document.getElementById('btn-add').addEventListener('click', () => {
+        moverOpciones(selectDisponibles, selectSeleccionadosVisible);
+    });
+    document.getElementById('btn-add-all').addEventListener('click', () => {
+        moverTodo(selectDisponibles, selectSeleccionadosVisible);
+    });
+    document.getElementById('btn-remove').addEventListener('click', () => {
+        moverOpciones(selectSeleccionadosVisible, selectDisponibles);
+    });
+    document.getElementById('btn-remove-all').addEventListener('click', () => {
+        moverTodo(selectSeleccionadosVisible, selectDisponibles);
+    });
+
+    // --- IMPORTANTE: Seleccionar todo en la caja 'Seleccionados' antes de enviar ---
+    const formElement = selectSeleccionadosVisible.closest('form');
+    formElement.addEventListener('submit', function() {
+        // Asegurarse de que todas las opciones en nuestro select visible estén marcadas como 'selected'
+        // para que se envíen correctamente con el 'name' del campo del formulario.
+        Array.from(selectSeleccionadosVisible.options).forEach(option => {
+            option.selected = true;
+        });
+
+        // Si estuvieras usando el select oculto de Django y sincronizando:
+        // selectSeleccionadosFormulario.innerHTML = ''; // Limpiar el select del form
+        // Array.from(selectSeleccionadosVisible.options).forEach(visibleOption => {
+        //     const newFormOption = new Option(visibleOption.text, visibleOption.value, true, true);
+        //     selectSeleccionadosFormulario.appendChild(newFormOption);
+        // });
+    });
+
+    // --- Poblar las listas al cargar la página ---
+    poblarListas();
+});
+</script>
+{% endblock %}

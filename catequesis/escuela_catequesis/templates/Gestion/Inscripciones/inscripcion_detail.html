@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="card shadow rounded">
+        <div class="card-header bg-primary text-white">
+            <h4 class="mb-0">Detalle de la Inscripción</h4>
+        </div>
+        <div class="card-body">
+            <p><strong>Estudiante:</strong> {{ inscripcion.estudiante.nombres }} {{ inscripcion.estudiante.apellidos }}</p>
+
+            <p><strong>Padre o madre:</strong>
+                {% if inscripcion.estudiante.padre %}
+                    {{ inscripcion.estudiante.padre.nombres }} {{ inscripcion.estudiante.padre.apellidos }}
+                {% else %}
+                    <span class="text-muted">No registrado</span>
+                {% endif %}
+            </p>
+
+            <p><strong>Padrino:</strong>
+                {% if inscripcion.padrino %}
+                    {{ inscripcion.padrino.nombres }} {{ inscripcion.padrino.apellidos }}
+                {% else %}
+                    <span class="text-muted">No registrado</span>
+                {% endif %}
+            </p>
+
+            <p><strong>Grupo:</strong> {{ inscripcion.grupo }}</p>
+            <p><strong>Fecha de inscripción:</strong> {{ inscripcion.fecha_inscripcion }}</p>
+            <p><strong>Aprobado:</strong> {{ inscripcion.aprobado|yesno:"Sí,No" }}</p>
+        </div>
+        <div class="card-footer text-end">
+            <a href="{% url 'inscripcion_update' inscripcion.grupo.id inscripcion.pk %}" class="btn btn-warning">Editar</a>
+            <a href="{% url 'inscripcion_list' inscripcion.grupo.id %}" class="btn btn-secondary">Volver</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

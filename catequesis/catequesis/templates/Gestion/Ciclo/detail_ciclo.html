@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-4">
+    <h2>{{ title|default:'Detalle del Ciclo' }}</h2>
+    <div class="card mt-3">
+        <div class="card-body">
+            <h4 class="card-title">{{ ciclo.nombre_ciclo }}</h4>
+            <p><strong>Fecha de inicio:</strong> {{ ciclo.fecha_inicio|date:"d/m/Y" }}</p>
+            <p><strong>Fecha de fin:</strong> {{ ciclo.fecha_fin|date:"d/m/Y" }}</p>
+            {% if ciclo.descripcion %}
+                <p><strong>Descripción:</strong> {{ ciclo.descripcion }}</p>
+            {% else %}
+                <p><em>Sin descripción</em></p>
+            {% endif %}
+            <p><strong>Activo:</strong> 
+                {% if ciclo.activo %}
+                    <span class="badge bg-success">Sí</span>
+                {% else %}
+                    <span class="badge bg-secondary">No</span>
+                {% endif %}
+            </p>
+            <p><strong>Observaciones:</strong> {{ ciclo.observaciones|default:'—' }}</p>
+            <a href="{{ cancel_url|default:request.META.HTTP_REFERER|default:'/' }}" class="btn btn-secondary mt-3">Volver a la lista</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
