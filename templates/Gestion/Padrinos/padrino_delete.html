@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-5">
+    <div class="card border-danger">
+        <div class="card-header bg-danger text-white">
+            <h5>{{ title|default:'Eliminar Padrino' }}</h5>
+        </div>
+        <div class="card-body">
+            <p class="text-danger">¿Estás seguro de que deseas eliminar al padrino <strong>{{ object }}</strong>?</p>
+            <form method="post">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">Eliminar</button>
+                <a href="{{ cancel_url|default:'/' }}" class="btn btn-secondary">Cancelar</a>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
